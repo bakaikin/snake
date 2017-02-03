@@ -5,18 +5,18 @@
 
 
 const int HEIGHT = 20;
-const int WIDTH = 30;
+const int WIDTH = 20;
 
-const int INTERVAL = 2;
-const int MAX_TURNS = 50;
+const int INTERVAL = 1;
+const int MAX_TURNS = 500;
 
 
 int main()
 {
     // Generate empty field without walls
-    vector<vector<FieldType>> pattern;
+    std::vector<std::vector<FieldType>> pattern;
     for (int i = 0; i < HEIGHT; ++i) {
-        pattern.push_back(vector<FieldType>());
+        pattern.push_back(std::vector<FieldType>());
         for (int j = 0; j < WIDTH; ++j) {
             pattern[i].push_back(NOTHING);
         }

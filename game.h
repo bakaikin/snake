@@ -25,7 +25,7 @@ public:
 
 class Game {
 public:
-    Game(const vector<vector<FieldType>>& pattern,
+    Game(const std::vector<std::vector<FieldType>>& pattern,
          Player * first,
          Player * second,
          Player * third,
@@ -66,7 +66,7 @@ private:        // methods
 private:        // fields
 
     // walls pattern
-    vector<vector<FieldType>> pattern_;
+    std::vector<std::vector<FieldType>> pattern_;
 
     // Temporary field objects
     std::vector<FieldObject> cherries_;

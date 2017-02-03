@@ -1,4 +1,5 @@
 #include "game.h"
+#include "io.h"
 
 #include <set>
 
@@ -35,34 +36,6 @@ const int MAX_MOVES = 100000;
 bool randomEvent(double probability);
 
 
-// --- Remove me
-template<class T>
-std::ostream& operator<<(std::ostream& os, const std::set<T>& v)
-{
-    for (const T& item: v) {
-        os << item << " ";
-    }
-    os << std::endl;
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const Point& p)
-{
-    os << "(" << p.x() << ", " << p.y() << ")";
-    return os;
-}
-
-template<class T>
-std::ostream& operator<<(std::ostream& os, std::vector<T>& v)
-{
-    for (const T& item: v) {
-        os << item << " ";
-    }
-    os << std::endl;
-    return os;
-}
-// --- \Remove me
-
 PlayerState::PlayerState(Player * p, Snake s)
 : player(p)
 , score(0)
@@ -72,7 +45,7 @@ PlayerState::PlayerState(Player * p, Snake s)
 }
 
 Game::Game(
-    const vector<vector<FieldType>>& pattern,
+    const std::vector<std::vector<FieldType>>& pattern,
     Player * first,
     Player * second,
     Player * third,
@@ -132,16 +105,22 @@ void Game::move()
     // 1. Generate new field
     Field field = currentField();
 
+    // Snakes that will die this turn.
+    std::set<int> corpses;
+
     // 2. Pass the field to the rest of the players. Wait for their turns.
     std::map<int, Direction> turns;
     for (auto playerState: playerStates_) {
         if (playerState.second.isAlive()) {
-            turns[playerState.first] = playerState.second.player->makeTurn(field);
+            try {
+                Direction turn = playerState.second.player->makeTurn(field);
+                turns[playerState.first] = turn;
+            } catch (...) {
+                // If player has thrown a tricky exception, let's kill him!
+                corpses.insert(playerState.first);
+            }
         }
     }
-
-    // Find snakes that will die this turn.
-    std::set<int> corpses;
 
     // Find new snake heads. Refresh players' snakes.
     std::map<int, Point> heads;
@@ -190,7 +169,7 @@ void Game::move()
             removeFieldObject(cherries_, head);
         }
 
-        else if (field.at(head.x(), head.y()) == LIFE) { // no support for lives at the moment
+        if (field.at(head.x(), head.y()) == LIFE) { // no support for lives at the moment
             // do nothing
             removeFieldObject(lives_, head);
         }
@@ -270,7 +249,7 @@ Field Game::currentField(int except) const
 std::map<int, PlayerState> Game::defaultPlayerStates(
     Player * first, Player * second, Player * third, Player * fourth)
 {
-    map<int, PlayerState> result;
+    std::map<int, PlayerState> result;
     result[0] = PlayerState(
         first,
         Snake(

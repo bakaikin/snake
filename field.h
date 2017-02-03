@@ -8,10 +8,6 @@
 #include <map>
 
 
-using std::vector;
-using std::map;
-
-
 class FieldObject {
 public:
     FieldObject() {}
@@ -42,13 +38,13 @@ private:
 
 class Field {
 public:
-    Field(const vector<vector<FieldType>>& pattern,
-          map<int, Snake> snakes,
-          const vector<FieldObject>& cherries,
-          const vector<FieldObject>& lives,
-          const vector<FieldObject>& bombs);
+    Field(const std::vector<std::vector<FieldType>>& pattern,
+          std::map<int, Snake> snakes,
+          const std::vector<FieldObject>& cherries,
+          const std::vector<FieldObject>& lives,
+          const std::vector<FieldObject>& bombs);
 
-    map<int, Snake> snakes() const
+    std::map<int, Snake> snakes() const
     {
         return snakes_;
     }
@@ -67,24 +63,26 @@ public:
 
     FieldType at(int x, int y) const
     {
+        if (x < 0 || x >= width() || y < 0 || y >= height())
+            throw std::runtime_error("Field access violation");
+
         return data_[y][x];
     }
 
 private:
     void setPoint(const Point& point, FieldType value)
     {
-        //std::cout << "Point: " << point.x() << "," << point.y() << std::endl;
         data_[point.y()][point.x()] = value;
     }
 
     // complete field state
-    vector<vector<FieldType>> data_;
+    std::vector<std::vector<FieldType>> data_;
 
     // map player -> his snake
-    map<int, Snake> snakes_;
+    std::map<int, Snake> snakes_;
 
     // temporary field objects
-    const vector<FieldObject>& cherries_;
-    const vector<FieldObject>& lives_;
-    const vector<FieldObject>& bombs_;
+    const std::vector<FieldObject>& cherries_;
+    const std::vector<FieldObject>& lives_;
+    const std::vector<FieldObject>& bombs_;
 };

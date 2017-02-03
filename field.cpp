@@ -2,11 +2,11 @@
 
 
 Field::Field(
-    const vector<vector<FieldType>>& pattern,
-    map<int, Snake> snakes,
-    const vector<FieldObject>& cherries,
-    const vector<FieldObject>& lives,
-    const vector<FieldObject>& bombs)
+    const std::vector<std::vector<FieldType>>& pattern,
+    std::map<int, Snake> snakes,
+    const std::vector<FieldObject>& cherries,
+    const std::vector<FieldObject>& lives,
+    const std::vector<FieldObject>& bombs)
 : data_(pattern)
 , snakes_(snakes)
 , cherries_(cherries)
@@ -14,7 +14,7 @@ Field::Field(
 , bombs_(bombs)
 {
     for (auto item: snakes) {
-        vector<Point> body = item.second.body();
+        std::vector<Point> body = item.second.body();
         for (int j = 0; j < body.size(); ++j) {
             // If the point is invalid and does not belong to the field, skip it. The snake will die this turn.
             // FIXME: do something with this hack

@@ -15,6 +15,11 @@ public:
         throw std::runtime_error("Not implemented");
     }
 
+    int index() const
+    {
+        return index_;
+    }
+
 protected:
     Snake mySnake(const Field& field) const
     {

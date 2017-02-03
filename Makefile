@@ -3,8 +3,8 @@ CXX = g++
 CXXFLAGS = -c -std=c++0x
 LDFLAGS = -g
 
-snake : main.o game.o snake.o field.o common.o
-	$(CXX) $(LDFLAGS) main.o game.o snake.o field.o common.o $(LDFLAGS) -o snake
+snake : main.o game.o snake.o field.o common.o io.o
+	$(CXX) $(LDFLAGS) main.o game.o snake.o field.o common.o io.o -o snake
 
 main.o : main.cpp
 	$(CXX) $(CXXFLAGS) main.cpp
@@ -20,6 +20,9 @@ field.o : field.cpp
 
 common.o : common.cpp
 	$(CXX) $(CXXFLAGS) common.cpp
+
+io.o : io.cpp
+	$(CXX) $(CXXFLAGS) io.cpp
 
 clean :
 	rm -f snake *.o

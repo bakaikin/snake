@@ -73,6 +73,7 @@ public:
 private:
     void setPoint(const Point& point, FieldType value)
     {
+        //std::cout << "Point: " << point.x() << "," << point.y() << std::endl;
         data_[point.y()][point.x()] = value;
     }
 

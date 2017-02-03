@@ -13,9 +13,19 @@ Field::Field(
 , lives_(lives)
 , bombs_(bombs)
 {
-    for (int i = 0; i < snakes.size(); ++i) {
-        vector<Point> body = snakes[i].body();
+    for (auto item: snakes) {
+        vector<Point> body = item.second.body();
         for (int j = 0; j < body.size(); ++j) {
+            // If the point is invalid and does not belong to the field, skip it. The snake will die this turn.
+            // FIXME: do something with this hack
+            if (body[j].x() < 0 ||
+                body[j].x() >= width() ||
+                body[j].y() < 0 ||
+                body[j].y() >= height()) {
+
+                continue;
+            }
+
             setPoint(body[j], SNAKE);
         }
     }

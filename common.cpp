@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include <stdexcept>
+
 
 bool operator==(const Point& lhs, const Point& rhs)
 {
@@ -18,7 +20,7 @@ Point operator-(const Point& point, Direction where)
         case LEFT:
             return Point(point.x() + 1, point.y());
     }
-    throw std::logic_error("<censored>");
+    throw std::logic_error("Wrong argument for Point::operator-");
 }
 
 Point operator+(const Point& point, Direction where)

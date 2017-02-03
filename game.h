@@ -5,12 +5,6 @@
 
 #include <boost/optional.hpp>
 
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <set>
-#include <algorithm>
-
 
 struct PlayerState {
 public:
@@ -57,11 +51,13 @@ private:        // methods
         return pattern_[0].size();
     }
 
+    // FIXME: get rid of this 'except'
     std::map<int, Snake> snakes(int except = -1) const;
 
     Field currentField(int except = -1) const;
 
-    void refreshFieldObjects(std::vector<FieldObject>& fieldObjects);
+    void refreshFieldObjects(std::vector<FieldObject>& fieldObjects, double appearProbability, int lifetime);
+    void removeFieldObject(std::vector<FieldObject>& fieldObjects, const Point& location);
 
     std::map<int, PlayerState> defaultPlayerStates(
         Player * first, Player * second, Player * third, Player * fourth

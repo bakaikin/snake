@@ -1,9 +1,14 @@
 #include "game.h"
 #include "dumb_player.h"
 
+#include "unistd.h"
+
 
 const int HEIGHT = 20;
-const int WIDTH = 20;
+const int WIDTH = 30;
+
+const int INTERVAL = 2;
+const int MAX_TURNS = 50;
 
 
 int main()
@@ -18,22 +23,24 @@ int main()
     }
 
     // Create players
-    Player * first = new DumbPlayer(0, 3);
-    Player * second = new DumbPlayer(1, 3);
-    Player * third = new DumbPlayer(2, 1);
-    Player * fourth = new DumbPlayer(3, 1);
+    Player * first = new DumbPlayer(0, UP);
+    Player * second = new DumbPlayer(1, RIGHT);
+    Player * third = new DumbPlayer(2, LEFT);
+    Player * fourth = new DumbPlayer(3, DOWN);
 
     // Go snake, I've created
     Game game(pattern, first, second, third, fourth);
 
     std::cout << "Beginning:" << std::endl;
     game.print();
+    sleep(INTERVAL);
 
     int counter = 0;
-    while (!game.isOver() && ++counter < 3) {
+    while (!game.isOver() && ++counter < MAX_TURNS) {
         game.move();
         std::cout << "Turn " << counter << std::endl;
         game.print();
+        sleep(INTERVAL);
     }
 
     return 0;

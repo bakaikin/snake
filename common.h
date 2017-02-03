@@ -1,9 +1,6 @@
 #pragma once
 
-#include <stdexcept>
-
-
-const int DEFAULT = -1;
+#include <climits>
 
 
 enum Direction { UP, RIGHT, DOWN, LEFT };
@@ -19,7 +16,7 @@ enum FieldType {
 
 class Point {
 public:
-    Point(int ix = DEFAULT, int iy = DEFAULT)
+    Point(int ix = INT_MAX, int iy = INT_MAX)
     : x_(ix), y_(iy) {}
 
     int x() const { return x_; }

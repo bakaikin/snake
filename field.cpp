@@ -73,7 +73,7 @@ std::ostream& operator<<(std::ostream& os, const Field& field)
     }
     os << std::endl;
 
-    for (int i = 0; i < field.height(); ++i) {
+    for (int i = field.height() - 1; i >= 0; --i) {
         os << '#';
         for (int j = 0; j < field.width(); ++j) {
             os << asSymbol(field.at(j, i));

@@ -8,7 +8,7 @@ const int HEIGHT = 20;
 const int WIDTH = 20;
 
 const int INTERVAL = 0;
-const int MAX_TURNS = 10000;
+const int MAX_TURNS = 5000;
 
 const int START_X_0 = 5;
 const int START_Y_0 = 5;
@@ -20,8 +20,6 @@ const int START_X_3 = 15;
 const int START_Y_3 = 5;
 
 const int START_LIVES = 1;
-
-const int MAX_MOVES = 100000;
 
 
 int main()
@@ -85,9 +83,9 @@ int main()
     sleep(INTERVAL);
 
     int counter = 0;
-    while (!game.isOver() && ++counter < MAX_TURNS) {
+    while (!game.isOver()) {
         game.move();
-        std::cout << "Turn " << counter << std::endl;
+        std::cout << "Turn " << ++counter << std::endl;
         game.print();
         sleep(INTERVAL);
     }

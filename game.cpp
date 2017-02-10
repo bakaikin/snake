@@ -41,6 +41,7 @@ Game::Game(const std::vector<std::vector<FieldType>>& pattern,
 , lives_()
 , deaths_()
 , maxTurns_(maxTurns)
+, turnNumber_(0)
 {
     //srand(time(NULL));
     srand(57); // Let the random be determined in beta version.
@@ -94,6 +95,10 @@ Game::Game(const std::vector<std::vector<FieldType>>& pattern,
 
 void Game::move()
 {
+    // Stop if turn limit reached
+    if (++turnNumber_ >= maxTurns_)
+        return;
+
     // 1. Generate new field
     Field field = currentField();
 
@@ -186,7 +191,7 @@ void Game::print() const
 
 bool Game::isOver() const
 {
-    return std::all_of(
+    return turnNumber_ >= maxTurns_ || std::all_of(
         playerStates_.begin(),
         playerStates_.end(),
         [] (std::pair<int, PlayerState> p)

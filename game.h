@@ -70,4 +70,5 @@ private:        // fields
     std::map<int, PlayerState> playerStates_;
 
     int maxTurns_;
+    int turnNumber_;
 };

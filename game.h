@@ -9,7 +9,7 @@
 struct PlayerState {
 public:
     PlayerState() {}
-    PlayerState(Player * p, Snake s);
+    PlayerState(Player * p, Snake s, int l);
 
     bool isAlive() const
     {
@@ -26,10 +26,8 @@ public:
 class Game {
 public:
     Game(const std::vector<std::vector<FieldType>>& pattern,
-         Player * first,
-         Player * second,
-         Player * third,
-         Player * fourth);
+         const std::vector<PlayerState>& startStates,
+         int maxTurns);
 
     void move();
 
@@ -59,10 +57,6 @@ private:        // methods
     void refreshFieldObjects(std::vector<FieldObject>& fieldObjects, double appearProbability, int lifetime);
     void removeFieldObject(std::vector<FieldObject>& fieldObjects, const Point& location);
 
-    std::map<int, PlayerState> defaultPlayerStates(
-        Player * first, Player * second, Player * third, Player * fourth
-    );
-
 private:        // fields
 
     // walls pattern
@@ -74,4 +68,6 @@ private:        // fields
     std::vector<FieldObject> deaths_;
 
     std::map<int, PlayerState> playerStates_;
+
+    int maxTurns_;
 };

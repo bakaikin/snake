@@ -2,16 +2,8 @@
 #include "io.h"
 
 #include <set>
+#include <cmath>
 
-
-const int START_X_0 = 5;
-const int START_Y_0 = 5;
-const int START_X_1 = 5;
-const int START_Y_1 = 15;
-const int START_X_2 = 15;
-const int START_Y_2 = 15;
-const int START_X_3 = 15;
-const int START_Y_3 = 5;
 
 const double CHERRY_PROBABILITY = 0.1;
 const double LIFE_PROBABILITY = 0.01;
@@ -28,36 +20,35 @@ const double EXPECTED_CHERRIES = 3;
 const double EXPECTED_LIVES = 0.5;
 const double EXPECTED_BOMBS = 0.5;
 
-const int START_LIVES = 1;
-
-const int MAX_MOVES = 100000;
-
 
 bool randomEvent(double probability);
 
 
-PlayerState::PlayerState(Player * p, Snake s)
+PlayerState::PlayerState(Player * p, Snake s, int l)
 : player(p)
 , score(0)
-, lives(START_LIVES)
+, lives(l)
 , snake(s)
 {
 }
 
-Game::Game(
-    const std::vector<std::vector<FieldType>>& pattern,
-    Player * first,
-    Player * second,
-    Player * third,
-    Player * fourth)
+
+Game::Game(const std::vector<std::vector<FieldType>>& pattern,
+     const std::vector<PlayerState>& startStates,
+     int maxTurns)
 : pattern_(pattern)
 , cherries_()
 , lives_()
 , deaths_()
-, playerStates_(defaultPlayerStates(first, second, third, fourth))
+, maxTurns_(maxTurns)
 {
     //srand(time(NULL));
     srand(57); // Let the random be determined in beta version.
+
+    // Initialize index -> player state map
+    for (size_t i = 0; i < startStates.size(); ++i) {
+        playerStates_[i] = startStates[i];
+    }
 
     Field field = currentField();
 
@@ -99,6 +90,7 @@ Game::Game(
         }
     }
 }
+
 
 void Game::move()
 {
@@ -148,9 +140,6 @@ void Game::move()
 
         if (field.at(head.x(), head.y()) == BOMB ||
             field.at(head.x(), head.y()) == WALL ||
-            // If at next turn there is a snake here, then either it came here now or it was here before.
-            // If it came here, then it's a head (and our snake is a corpse already).
-            // If it was here earlier, then it's the body present last time.
             newField.at(head.x(), head.y()) == SNAKE) {
 
             corpses.insert(item.first);
@@ -244,41 +233,6 @@ std::map<int, Snake> Game::snakes(int except) const
 Field Game::currentField(int except) const
 {
     return Field(pattern_, snakes(except), cherries_, lives_, deaths_);
-}
-
-std::map<int, PlayerState> Game::defaultPlayerStates(
-    Player * first, Player * second, Player * third, Player * fourth)
-{
-    std::map<int, PlayerState> result;
-    result[0] = PlayerState(
-        first,
-        Snake(
-            Point(START_X_0, START_Y_0),
-            {RIGHT, RIGHT, RIGHT}
-        )
-    );
-    result[1] = PlayerState(
-        second,
-        Snake(
-            Point(START_X_1, START_Y_1),
-            {RIGHT, RIGHT, RIGHT}
-        )
-    );
-    result[2] = PlayerState(
-        third,
-        Snake(
-            Point(START_X_2, START_Y_2),
-            {LEFT, LEFT, LEFT}
-        )
-    );
-    result[3] = PlayerState(
-        fourth,
-        Snake(
-            Point(START_X_3, START_Y_3),
-            {LEFT, LEFT, LEFT}
-        )
-    );
-    return result;
 }
 
 void Game::refreshFieldObjects(std::vector<FieldObject>& fieldObjects,
